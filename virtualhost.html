@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cấu hình Virtual Host cho Flask</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        section {
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+        }
+        pre {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+        h2 {
+            color: #333;
+        }
+        ul {
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Cấu hình Virtual Host cho Flask</h1>
+    </header>
+    
+    <section>
+        <h2>Giới thiệu</h2>
+        <p>Để cấu hình Virtual Host cho Flask, bạn có thể sử dụng server tích hợp của Flask trong môi trường phát triển. Bài viết này sẽ hướng dẫn bạn cách làm việc đó bằng cách sử dụng tên miền ảo (virtual domain) như <code>test.com</code> để thử nghiệm ứng dụng Flask của bạn. Lưu ý rằng đây chỉ là ví dụ và bạn có thể thay thế bằng tên miền yêu thích của mình. Tuy nhiên, tên miền này chỉ có thể truy cập được trong máy tính của bạn và không thể truy cập từ bên ngoài mạng.</p>
+    </section>
+    
+    <section>
+        <h2>Bước 1: Sửa file hosts</h2>
+        <p>Trước tiên, bạn cần chỉnh sửa file <code>hosts</code> trên hệ điều hành của mình để ánh xạ tên miền <code>test.com</code> tới địa chỉ <code>localhost</code>.</p>
+        
+        <ul>
+            <li><strong>Trên Linux hoặc macOS:</strong> Mở file <code>/etc/hosts</code> với quyền <code>sudo</code>.</li>
+            <pre>sudo nano /etc/hosts</pre>
+            <p>Thêm dòng sau vào cuối file:</p>
+            <pre>127.0.0.1   test.com</pre>
+            
+            <li><strong>Trên Windows:</strong> Mở Notepad với quyền admin và chỉnh sửa file <code>C:\Windows\System32\drivers\etc\hosts</code>.</li>
+            <pre>127.0.0.1   test.com</pre>
+        </ul>
+        <p><strong>Lưu ý:</strong> Bạn có thể thay <code>test.com</code> bằng tên miền khác nếu muốn. Tuy nhiên, điều này sẽ chỉ có tác dụng trên máy tính của bạn và không thể truy cập từ các thiết bị khác trong mạng hoặc qua Internet.</p>
+    </section>
+    <section>
+        <h2>Bước 2: Tạo ứng dụng Flask</h2>
+        <p>Giả sử bạn đã có một ứng dụng Flask đơn giản. Đây là mã nguồn cơ bản của ứng dụng Flask:</p>
+        <pre>
+            from flask import Flask, render_template
+            from flask_socketio import SocketIO
+            import asyncio
+            
+            app = Flask(__name__)
+            socketio = SocketIO(app,async_mode='gevent')
+            
+            @app.route('/')
+            async def home():
+                await asyncio.sleep(2)  # Giả lập tác vụ bất đồng bộ
+                return 'Hello from Flask with asyncio and Socket.IO!'
+            
+            @socketio.on('message')
+            def handle_message(msg):
+                print('Received message: ' + msg)
+            #Đừng đổi tên app và socketio vì server được cấu hình để phục vụ 2 cái đấy duy nhất nếu muốn đổi thì hãy đổi cả mã nguồn server.
+            #Ko cần phải app.run hay socketio.run
+        </pre>
+    </section>
+    
+    <section>
+        <h2>Bước 3: Chạy ứng dụng Flask</h2>
+        <p>Chọn dự án trên app và bấm run server</p>
+        <p>Ứng dụng sẽ chạy trên <code>localhost</code> và bạn có thể truy cập nó qua <a href="http://test.com:5000" target="_blank">http://test.com:5000</a> trên trình duyệt.</p>
+    </section>
+    <section>
+        <h2>Lưu ý</h2>
+        <ul>
+            <li>Cách cấu hình này chỉ áp dụng trong môi trường phát triển, nơi bạn cần kiểm tra ứng dụng với tên miền tùy chỉnh.</li>
+            <li>Tên miền <code>test.com</code> sẽ chỉ có thể truy cập từ máy tính của bạn, không thể truy cập từ các thiết bị khác trong mạng hoặc qua Internet.</li><br>
+        </ul>
+    </section>
+    <footer style="background-color: #333; color: white; text-align: center; padding: 10px; position: fixed; bottom: 0; width: 100%;">
+        <p>&copy; 2025 Flask Virtual Host Setup</p>
+    </footer>
+</body>
+</html>

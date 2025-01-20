@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng dẫn đưa web lên mạng</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        p, ul {
+            margin-top: 10px;
+        }
+        .instructions {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hướng dẫn đưa ứng dụng web lên mạng</h1>
+
+    <p>Để đưa ứng dụng web của bạn lên mạng và có thể truy cập từ bất kỳ đâu, làm theo các bước sau:</p>
+
+    <div class="instructions">
+        <h2>Bước 1: Mở cổng trên router</h2>
+        <p>Mở cổng 5001 và 5000 trên router của bạn để cho phép các kết nối từ internet tới máy chủ local:</p>
+        <ul>
+            <li>Truy cập vào trang quản trị của router thông qua địa chỉ IP của router.</li>
+            <li>Đăng nhập với tên người dùng và mật khẩu của router.</li>
+            <li>Tìm đến phần <strong>Port Forwarding</strong> hoặc <strong>Virtual Server</strong>.</li>
+            <li>Mở cổng TCP 5000 hoặc 5001 và trỏ nó tới địa chỉ IP local của máy chủ (máy tính đang chạy Flask server).</li>
+            <li>Lưu cấu hình và khởi động lại router nếu cần.</li>
+        </ul>
+
+        <h2>Bước 2: Kiểm tra địa chỉ IP công cộng</h2>
+        <p>Truy cập vào <a href="https://www.whatismyip.com" target="_blank">WhatIsMyIP</a> để kiểm tra địa chỉ IP công cộng của bạn. Đây là địa chỉ mà người dùng từ bên ngoài có thể sử dụng để truy cập ứng dụng web của bạn.</p>
+
+        <h2>Bước 3: Kiểm tra kết nối từ bên ngoài</h2>
+        <p>Dùng một thiết bị khác (hoặc nhờ ai đó ở bên ngoài mạng của bạn) để truy cập ứng dụng web thông qua địa chỉ IP công cộng và cổng đã mở, ví dụ:</p>
+        <p><strong>http://<em>địa-chỉ-IP-công-cộng</em>:8888</strong></p>
+
+        <h2>Lưu ý</h2>
+        <p>Nếu bạn muốn sử dụng tên miền thay vì địa chỉ IP, bạn có thể cấu hình DNS hoặc sử dụng dịch vụ DNS động (Dynamic DNS) để tên miền trỏ về địa chỉ IP công cộng của bạn.</p>
+    </div>
+</body>
+</html>

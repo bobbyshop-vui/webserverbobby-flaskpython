@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Configuration Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 20px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hướng dẫn cấu hình Flask với SSL, asyncio và Socket.IO</h1>
+
+    <h2>1. Cấu hình SSL với OpenSSL:</h2>
+    <ul>
+        <li>Cài đặt OpenSSL trên máy của bạn.</li>
+        <li>Mở Terminal và chạy lệnh sau để tạo chứng chỉ SSL:</li>
+    </ul>
+    <pre>openssl genpkey -algorithm RSA -out localhost.key -aes256</pre>
+    <pre>openssl req -new -key localhost.key -out localhost.csr</pre>
+    <pre>openssl x509 -req -in localhost.csr -signkey localhost.key -out localhost.crt</pre>
+    <p>Hãy cho các tệp ssl này vào thư mục dự án của bạn và lưu ý phải có localhost.key và localhost.crt (không đổi tên file chứng chỉ ssl).</p>
+    <ul>
+        <li>Sử dụng chúng trong Flask để cấu hình SSL khi chạy ứng dụng.</li>
+    </ul>
+
+    <h2>2. Sử dụng asyncio trong Flask:</h2>
+    <ul>
+        <li>Flask hỗ trợ bất đồng bộ với <code>asyncio</code>.</li>
+        <li>Tạo các route bất đồng bộ bằng <code>async def</code>.</li>
+        <li>Sử dụng <code>await</code> để gọi các hàm bất đồng bộ trong route.</li>
+        <li>Đảm bảo rằng Flask đang chạy trong môi trường hỗ trợ bất đồng bộ.</li>
+        <li>Ko cần cài nó qua pip!</li>
+        <li>Nó sẽ giúp máy chủ của bạn có thể xử lý nhiều yêu cầu 1 lúc.</li>
+    </ul>
+
+    <h2>3. Sử dụng Socket.IO với Flask:</h2>
+    <ul>
+        <li>Cài đặt thư viện <code>Flask-SocketIO</code>:</li>
+    </ul>
+    <pre>pip install flask-socketio</pre>
+    <ul>
+        <li>Socket.IO giúp giao tiếp theo thời gian thực giữa server và client.</li>
+    </ul>
+
+    <h2>4. Ví dụ mã Flask với SSL, asyncio và Socket.IO:</h2>
+    <pre>
+from flask import Flask, render_template
+from flask_socketio import SocketIO
+import asyncio
+
+app = Flask(__name__)
+socketio = SocketIO(app,async_mode='gevent')
+
+@app.route('/')
+async def home():
+    await asyncio.sleep(2)  # Giả lập tác vụ bất đồng bộ
+    return 'Hello from Flask with asyncio and Socket.IO!'
+
+@socketio.on('message')
+def handle_message(msg):
+    print('Received message: ' + msg)
+#Đừng đổi tên app và socketio vì server được cấu hình để phục vụ 2 cái đấy duy nhất nếu muốn đổi thì hãy đổi cả mã nguồn server.
+#Ko cần phải app.run hay socketio.run
+    </pre>
+</body>
+</html>
